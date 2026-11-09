@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090617">
+  <meta name="description" content="Internet Vault - simpan konten pilihan untuk dibuka kembali secara offline.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>Internet Vault</title>
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Internet Vault beranda">
+      <span class="brand-mark">◈</span><span>INTERNET<span class="brand-accent">VAULT</span><small>OFFLINE CONTENT STORAGE</small></span>
+    </a>
+    <div class="top-actions">
+      <span id="connectionBadge" class="status"><i></i> Memeriksa koneksi</span>
+      <button id="installBtn" class="icon-btn hidden" title="Pasang aplikasi">⇩</button>
+      <button id="settingsBtn" class="icon-btn" title="Pengaturan">⚙</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">PERSONAL OFFLINE STORAGE</p>
+        <h1>Internet, <span>tersimpan.</span></h1>
+        <p class="hero-copy">Simpan halaman, gambar, dokumen, dan file pilihan saat online. Buka kembali koleksimu saat offline.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-scroll="savePanel">＋ Simpan konten</button>
+          <button class="btn btn-ghost" id="offlineModeBtn">◉ Emergency Offline</button>
+        </div>
+      </div>
+      <div class="orb-wrap" aria-hidden="true"><div class="orb"><span>IV</span><i></i></div><div class="orb-caption">YOUR DATA · YOUR VAULT</div></div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card featured">
+        <div class="stat-head"><span>RUANG TERPAKAI</span><span class="stat-icon">▤</span></div>
+        <div class="stat-value"><strong id="usedValue">0 B</strong><small> / target 5 GB</small></div>
+        <div class="progress"><span id="usageBar"></span></div>
+        <div class="stat-foot"><span id="usagePercent">0% digunakan</span><span id="quotaText">Memeriksa kapasitas…</span></div>
+      </article>
+      <article class="stat-card"><div class="stat-head"><span>KONTEN TERSIMPAN</span><span class="stat-icon">▧</span></div><strong class="stat-number" id="itemCount">0</strong><small>item di vault</small></article>
+      <article class="stat-card"><div class="stat-head"><span>WEBSITE</span><span class="stat-icon">◎</span></div><strong class="stat-number" id="pageCount">0</strong><small>halaman tersimpan</small></article>
+      <article class="stat-card"><div class="stat-head"><span>FILE</span><span class="stat-icon">◇</span></div><strong class="stat-number" id="fileCount">0</strong><small>gambar, video, dokumen</small></article>
+    </section>
+
+    <section class="panel" id="savePanel">
+      <div class="section-heading"><div><p class="eyebrow">COLLECTOR</p><h2>Simpan ke Vault</h2></div><span class="live-tag"><i></i> LOCAL STORAGE</span></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="urlTab">Simpan URL</button>
+        <button class="tab" data-tab="fileTab">Unggah file</button>
+        <button class="tab" data-tab="autoTab">Auto Collector</button>
+      </div>
+      <div id="urlTab" class="tab-content active">
+        <label for="urlInput">Alamat halaman atau file</label>
+        <div class="input-row"><input id="urlInput" type="url" placeholder="https://contoh.com/artikel" autocomplete="url"><button id="saveUrlBtn" class="btn btn-primary">Simpan URL</button></div>
+        <p class="hint">Halaman web hanya bisa diambil jika server mengizinkan akses browser (CORS). Jika ditolak, gunakan unggah file atau simpan halaman melalui fitur browser yang tersedia.</p>
+      </div>
+      <div id="fileTab" class="tab-content">
+        <label for="fileInput">Pilih file dari perangkat</label>
+        <div class="file-drop"><span class="upload-symbol">⇧</span><strong>Pilih file untuk disimpan offline</strong><small>Gambar, video, PDF, dokumen, audio, dan file lain</small><input id="fileInput" type="file" multiple></div>
+        <p class="hint">File disimpan di penyimpanan lokal browser pada perangkat ini.</p>
+      </div>
+      <div id="autoTab" class="tab-content">
+        <div class="auto-box">
+          <div><strong>Pengumpulan otomatis</strong><p class="hint">Masukkan URL yang ingin diperiksa. Saat fitur aktif dan browser sedang online, aplikasi mencoba menyimpannya berkala selama halaman aplikasi tetap terbuka.</p></div>
+          <label class="switch"><input type="checkbox" id="autoToggle"><span></span></label>
+        </div>
+        <label for="autoUrlInput">URL untuk dikumpulkan</label>
+        <div class="input-row"><input id="autoUrlInput" type="url" placeholder="https://contoh.com/halaman"><button id="addAutoUrlBtn" class="btn btn-primary">Tambah</button></div>
+        <div id="autoList" class="auto-list"></div>
+        <p class="hint warning">Catatan: website tidak dapat mendeteksi WiFi secara konsisten, menjalankan tugas terus-menerus saat ditutup, atau menjamin hanya memakai WiFi. Aktifkan ini hanya ketika kamu yakin HP memakai WiFi. Android dapat menghentikan tab di latar belakang.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h2>Isi Vault</h2></div><div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Cari konten…"></div></div>
+      <div class="filter-row">
+        <button class="filter active" data-filter="all">Semua</button><button class="filter" data-filter="page">Website</button><button class="filter" data-filter="file">File</button>
+        <button id="exportBtn" class="btn btn-small btn-ghost">Ekspor daftar</button>
+      </div>
+      <div id="vaultList" class="vault-list"><div class="empty-state"><span>◈</span><strong>Vault masih kosong</strong><p>Simpan halaman atau unggah file untuk memulai koleksimu.</p></div></div>
+    </section>
+
+    <section class="notice">
+      <span>ⓘ</span><p><strong>Ketahui batasannya.</strong> Internet Vault menyimpan salinan konten yang berhasil diunduh, bukan kuota atau koneksi internet. Konten yang memerlukan login, streaming terlindungi, atau diblokir CORS mungkin tidak bisa disimpan. Kapasitas 5 GB adalah target aplikasi, bukan jaminan browser memberi ruang sebesar itu.</p>
+    </section>
+    <footer>INTERNET VAULT <span>·</span> DATA STAYS ON THIS DEVICE</footer>
+  </main>
+
+  <dialog id="settingsDialog" class="modal">
+    <form method="dialog"><button class="modal-close" aria-label="Tutup">×</button></form>
+    <p class="eyebrow">PREFERENCES</p><h2>Pengaturan Vault</h2>
+    <label for="targetSelect">Batas target aplikasi</label>
+    <select id="targetSelect"><option value="5368709120">5 GB</option></select>
+    <label class="check-line"><input type="checkbox" id="wifiConfirm"> Saya akan memastikan memakai WiFi sebelum Auto Collector dijalankan</label>
+    <p class="hint">Browser tidak menyediakan cara yang andal bagi halaman web biasa untuk memastikan jenis jaringan WiFi. Konfirmasi ini bersifat pengingat, bukan deteksi teknis.</p>
+    <button id="clearAllBtn" type="button" class="btn btn-danger">Hapus semua konten tersimpan</button>
+  </dialog>
+  <dialog id="viewerDialog" class="modal viewer-modal">
+    <button id="viewerClose" class="modal-close" aria-label="Tutup">×</button>
+    <p class="eyebrow">VAULT PREVIEW</p><h2 id="viewerTitle">Konten</h2><div id="viewerBody" class="viewer-body"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

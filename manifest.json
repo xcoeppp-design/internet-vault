@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "Internet Vault",
+  "short_name": "Vault",
+  "description": "Simpan konten pilihan untuk dibuka kembali secara offline.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090617",
+  "theme_color": "#090617",
+  "categories": ["utilities", "productivity"]
+}
